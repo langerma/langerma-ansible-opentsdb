@@ -8,3 +8,7 @@ opentsdb_install_tar: "opentsdb-2.4.tar.gz"
 opentsdb_install_dir: "/app/opentsdb"
 opentsdb_conf_dir: "{{ opentsdb_install_dir }}/config"
 opentsdb_log_dir: "{{ opentsdb_install_dir }}/log"
+opentsdb_bind: 0.0.0.0
+opentsdb_port: 4242
+zookeeper_hosts: "{{ groups.master }}"
+zookeeper_quorum: "{{ zookeeper_hosts | join(',')  }}"

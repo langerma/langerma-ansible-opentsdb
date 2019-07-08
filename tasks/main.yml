@@ -1,5 +1,5 @@
 ---
-- name: "Create hbase Path {{ opentsdb_install_dir }}"
+- name: "Create opentsdb Path {{ opentsdb_install_dir }}"
   file:
     path: "{{ opentsdb_install_dir }}"
     owner: "{{ opentsdb_user }}"
@@ -7,9 +7,17 @@
     state: directory
     mode: "u=rwx,g=rwx,o=rwx"
 
-- name: "Create hbase log Path {{ opentsdb_log_dir }}"
+- name: "Create opentsdb log Path {{ opentsdb_log_dir }}"
   file:
     path: "{{ opentsdb_log_dir }}"
+    owner: "{{ opentsdb_user }}"
+    group: "{{ opentsdb_group }}"
+    state: directory
+    mode: "u=rwx,g=rwx,o=rwx"
+
+- name: "Create opentsdb conf dir {{ opentsdb_log_dir }}"
+  file:
+    path: "{{ opentsdb_conf_dir }}"
     owner: "{{ opentsdb_user }}"
     group: "{{ opentsdb_group }}"
     state: directory
@@ -28,3 +36,27 @@
     owner: "{{ opentsdb_user }}"
     group: "{{ opentsdb_group }}"
     extra_opts: [--strip-components=1]
+
+- name: "configure OpenTSDB"
+  template:
+    src: templates/opentsdb.conf.j2
+    dest: "{{ opentsdb_conf_dir }}/opentsdb.conf"
+
+- name: "copy tsdb-metric.sh"
+  template:
+    src: "tsdb-metrics.sh.j2"
+    dest: "{{ opentsdb_install_dir }}/bin/tsdb-metrics.sh"
+    owner: "{{ opentsdb_user }}"
+    group: "{{ opentsdb_group }}"
+    mode: "u=rwx,g=rwx,o=rwx"
+
+- name: Copy OpenTSDB service file
+  template:
+    src: opentsdb.ini.j2
+    dest: "{{ supervisord_ini_dir }}/filebeat.ini"
+    owner: "{{ opentsdb_user }}"
+    group: "{{ opentsdb_group }}"
+    mode: "u=rw,g=r,o=r"
+  notify:
+    - update supervisord
+    - restart opentsdb

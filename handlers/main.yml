@@ -1,0 +1,7 @@
+---
+- name: "update supervisord"
+  shell: "supervisorctl reread && supervisorctl update"
+  become: yes
+
+- name: "restart opentsdb"
+  supervisorctl: name=opentsdb state=restarted

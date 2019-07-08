@@ -1,0 +1,8 @@
+[program:opentsdb]
+user={{ opentsdb_user }}
+command={{ opentsdb_install_dir }}/bin/tsdb tsd --config {{ opentsdb_conf_dir }}/opentsdb.conf
+autostart=true
+autorestart=true
+environment=JAVA_HOME={{ java_install_dir }}/{{ java_version }},JVMARGS=-Xmx1024m -DLOG_FILE={{ opentsdb_install_dir }}/log/opentsdb.log -DQUERY_LOG={{ opentsdb_install_dir }}/log/queries.log -XX:+ExitOnOutOfMemoryError -enableassertions -enablesystemassertions
+stdout_logfile={{ opentsdb_install_dir }}/log/opentsdb.out.log
+stderr_logfile={{ opentsdb_install_dir }}/log/opentsdb.err.log
