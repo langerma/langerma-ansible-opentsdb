@@ -15,6 +15,14 @@
     state: directory
     mode: "u=rwx,g=rwx,o=rwx"
 
+- name: "Create opentsdb tmp Path {{ opentsdb_tmp_dir }}"
+  file:
+    path: "{{ opentsdb_tmp_dir }}"
+    owner: "{{ opentsdb_user }}"
+    group: "{{ opentsdb_group }}"
+    state: directory
+    mode: "u=rwx,g=rwx,o=rwx"
+
 - name: "Create opentsdb conf dir {{ opentsdb_log_dir }}"
   file:
     path: "{{ opentsdb_conf_dir }}"

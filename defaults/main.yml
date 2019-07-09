@@ -6,6 +6,8 @@ opentsdb_user: "hadoop"
 opentsdb_group: "hadoop"
 opentsdb_install_tar: "opentsdb-2.4.tar.gz"
 opentsdb_install_dir: "/app/opentsdb"
+opentsdb_tmp_dir: "/tmp/tsdb"
+opentsdb_static_dir: "{{ opentsdb_install_dir }}/share/opentsdb/static"
 opentsdb_conf_dir: "{{ opentsdb_install_dir }}/config"
 opentsdb_log_dir: "{{ opentsdb_install_dir }}/log"
 opentsdb_bind: 0.0.0.0
