@@ -45,10 +45,27 @@
     group: "{{ opentsdb_group }}"
     extra_opts: [--strip-components=1]
 
+- name: "add OpenTSDB startup file tsdb"
+  template:
+    src: templates/tsdb.j2
+    dest: "{{ opentsdb_install_dir }}/bin/tsdb"
+    mode: "u=rwx,g=rx,o=rx"
+  notify:
+    - restart opentsdb
+
 - name: "configure OpenTSDB"
   template:
     src: templates/opentsdb.conf.j2
     dest: "{{ opentsdb_conf_dir }}/opentsdb.conf"
+  notify:
+    - restart opentsdb
+
+- name: "configure OpenTSDB logging"
+  template:
+    src: templates/logback.xml.j2
+    dest: "{{ opentsdb_conf_dir }}/logback.xml"
+  notify:
+    - restart opentsdb
 
 - name: "copy tsdb-metric.sh"
   template:
@@ -61,7 +78,7 @@
 - name: Copy OpenTSDB service file
   template:
     src: opentsdb.ini.j2
-    dest: "{{ supervisord_ini_dir }}/filebeat.ini"
+    dest: "{{ supervisord_ini_dir }}/opentsdb.ini"
     owner: "{{ opentsdb_user }}"
     group: "{{ opentsdb_group }}"
     mode: "u=rw,g=r,o=r"
